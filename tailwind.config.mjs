@@ -6,6 +6,7 @@ export default {
     extend: {
       fontFamily: {
         marker: ['"Marker"', ...defaultTheme.fontFamily.sans],
+        marker2: ['"Marker2"', ...defaultTheme.fontFamily.sans],
         emojis: ['"Emojis"', ...defaultTheme.fontFamily.sans],
         mona: ['"Mona"', ...defaultTheme.fontFamily.sans],
       },

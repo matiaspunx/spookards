@@ -1,0 +1,108 @@
+---
+import { type Movie } from "@/types/Types";
+import { saveMovies, getMovies } from "@/lib/sbfunctions";
+
+const movies: Movie[] = await getMovies();
+---
+
+<div class="formCard rounded-lg border border-white/10 px-6 py-6 text-center">
+  <form action="#" method="post" id="form">
+    <label
+      for="movie"
+      class="font-marker2 flex items-center justify-center text-4xl text-red-500"
+      >¿Cual es tu pelicula de terror favorita? <div>
+        <button
+          id="sm-play"
+          type="button"
+          class="font-emoji transition hover:-rotate-3 hover:scale-110"
+          >🔊</button
+        >
+        <audio>
+          <source src="/what-is-your-scary-movie.mp3" type="audio/mpeg" />
+        </audio>
+      </div></label
+    >
+
+    <input
+      type="text"
+      id="movie"
+      name="movie"
+      placeholder="Nombre de la película"
+      class="my-6 w-full rounded-md border border-red-900 bg-gradient-to-r px-3 py-2 text-2xl text-black"
+    />
+
+    <div class="py-2">
+      <h3 class="font-mona text-sm italic text-red-300">
+        No se te ocurre ninguna pelicula, acá tenés unas sugerencias:
+      </h3>
+      <div id="sugerencias" class="flex flex-wrap justify-center gap-4 py-4">
+        {
+          movies.map((movie) => (
+            <button
+              type="button"
+              class="border-b border-white px-1 font-mona text-white hover:border-white/80 hover:text-white/80"
+            >
+              {movie.title}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="rounded-md bg-red-600 px-4 py-2 font-mona text-white"
+      >Enviar</button
+    >
+  </form>
+</div>
+<script>
+  import { navigate } from "astro:transitions/client";
+  const smplay = document.getElementById("sm-play") as HTMLElement;
+  const sugerencias = document.getElementById("sugerencias") as HTMLElement;
+  const movie = document.getElementById("movie") as HTMLInputElement;
+  const form = document.getElementById("form") as HTMLFormElement;
+
+  // audio
+  smplay.addEventListener("click", () => {
+    smplay.innerText = "🔊";
+    const audio = document.querySelector("audio") as HTMLAudioElement;
+    audio.play();
+  });
+
+  // form
+
+  const bntsugs = sugerencias.querySelectorAll(
+    "button"
+  ) as NodeListOf<HTMLButtonElement>;
+
+  bntsugs.forEach((btn, i) => {
+    btn.addEventListener("click", () => {
+      movie.value = btn.innerText;
+      console.log(movie.value);
+    });
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    generateQuote();
+  });
+
+  async function generateQuote() {
+    const data = new FormData(form);
+
+    const response = await fetch("/api/quote", {
+      method: "POST",
+      body: data,
+    });
+
+    if (response.ok) {
+      const quote = await response.json();
+      // save quote to local storage
+      localStorage.setItem("quote", JSON.stringify(quote));
+      navigate(`/quote/generate`);
+    } else {
+      alert("Error al recibir quote");
+    }
+  }
+</script>

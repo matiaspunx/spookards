@@ -1,0 +1,129 @@
+---
+import { CldUploadWidget, CldImage } from "astro-cloudinary";
+import Layout from "@/layouts/Layout.astro";
+const params = Astro.params;
+const id = params.id;
+---
+
+<Layout title="Spookards">
+  <main class="space-y-8">
+    <div class="rounded-lg border border-white/10 p-8 text-center">
+      <h2 class="mb-4 font-mona text-xl text-red-400">
+        Cita de la película <span id="movie" class="italic"></span>
+      </h2>
+      <blockquote id="blockquote" class="flex flex-col gap-4 text-center">
+        <p class="text-balance font-mona text-xl text-red-300"></p>
+        <hr class="w-full border-red-900" />
+        <small class="text-balance font-mona text-xl text-red-300"> </small>
+      </blockquote>
+    </div>
+
+    <div class="rounded-lg border border-white/10 p-8 text-center">
+      <h2 class="mb-4 font-mona text-xl text-red-400">Ahora sube tu foto</h2>
+      <CldUploadWidget
+        id="upload-widget"
+        uploadPreset="spookards-images"
+        options={{
+          sources: ["local", "camera"],
+          multiple: false,
+          maxFiles: 1,
+          language: "es",
+          text: {
+            es: {
+              or: "O",
+
+              menu: {
+                files: "Subir desde tu dispositivo",
+              },
+              local: {
+                browse: "Seleccionar",
+                dd_title_single: "Arrastra tu imagen aquí",
+              },
+            },
+          },
+        }}
+      >
+        <button color="brand" class="rounded-lg bg-red-500 px-3 py-2 text-white"
+          >Subir imagen</button
+        >
+      </CldUploadWidget>
+
+      <div id="photo-container" class="mt-8 place-content-center">
+        <CldImage
+          id="photo-image"
+          src=""
+          alt=""
+          class={`flex h-full w-full rounded-lg opacity-0 transition`}
+        />
+      </div>
+    </div>
+
+    <div class="rounded-lg border border-white/10 p-8 text-center">
+      <a
+        href="/postcard/generate"
+        class="rounded-lg bg-red-500 px-3 py-2 text-white">Generar postcard</a
+      >
+    </div>
+    <div>&nbsp;</div>
+  </main>
+</Layout>
+<script>
+  import { getCldImageUrl } from "astro-cloudinary/helpers";
+
+  const photo = document.querySelector("#photo-image") as HTMLImageElement;
+  const widget = document.querySelector("#upload-widget");
+
+  const blockquote = document.getElementById("blockquote") as HTMLElement;
+  const movie = document.getElementById("movie") as HTMLElement;
+
+  // get quote from local storage
+  const quote = localStorage.getItem("quote");
+
+  // transform quote to json
+  const quoteJson = quote ? JSON.parse(quote) : null;
+
+  if (!quoteJson) {
+    blockquote.innerHTML = `<p>No se encontró la cita</p>`;
+  } else {
+    movie.innerText = quoteJson.movie;
+    blockquote.innerHTML = `<p class="text-4xl text-white font-mona text-balance">${quoteJson.title}</p>
+    <hr class="w-full border-red-900/30" />
+    <small class="text-balance font-mona text-xl text-red-300">${quoteJson.author}</small>`;
+
+    if (quoteJson.url) {
+      photo.src = quoteJson.url;
+      photo.classList.add("opacity-100");
+    }
+  }
+
+  if (widget) {
+    widget.addEventListener("clduploadwidget:success", ((
+      e: CustomEvent<{
+        info: { public_id: string };
+      }>
+    ) => {
+      console.log("clduploadwidget:success", e.detail);
+      const publicId = e.detail.info.public_id;
+      showPhoto(publicId);
+    }) as EventListener);
+  }
+
+  const showPhoto = (publicId: string) => {
+    const url = getCldImageUrl({
+      src: publicId,
+      blur: "50",
+    });
+
+    photo.src = url;
+
+    photo.onload = () => {
+      photo.style.opacity = "1";
+    };
+
+    quoteJson.publicId = publicId;
+    quoteJson.url = url;
+
+    console.log(quoteJson);
+    localStorage.setItem("quote", JSON.stringify(quoteJson));
+  };
+</script>
