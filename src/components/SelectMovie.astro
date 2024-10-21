@@ -54,7 +54,7 @@ const movies: Movie[] = await getMovies();
     <button
       type="submit"
       class="rounded-md bg-red-600 px-6 py-2 font-mona text-xl text-white transition hover:bg-red-700"
-      >Enviar</button
+      >Generar cita</button
     >
   </form>
 </div>
@@ -69,6 +69,7 @@ const movies: Movie[] = await getMovies();
   smplay.addEventListener("click", () => {
     smplay.innerText = "🔊";
     const audio = document.querySelector("#scary-movie") as HTMLAudioElement;
+    audio.volume = 0.1;
     audio.play();
   });
 

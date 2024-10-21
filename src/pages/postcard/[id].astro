@@ -6,6 +6,16 @@ import { CldImage } from "astro-cloudinary";
 <Layout title="Spookards">
   <main class="breackout space-y-8">
     <div id="photo-container" class="mt-8 place-content-center">
+      <div
+        id="loading"
+        class="flex h-full min-h-[453px] w-full items-center justify-center rounded-lg shadow-lg transition"
+      >
+        <h4
+          class="animate-pulse text-center font-marker2 text-2xl text-red-600 shadow-lg"
+        >
+          Generando tu postcard. Por favor espera...
+        </h4>
+      </div>
       <CldImage
         id="photo-image"
         src=""
@@ -13,11 +23,13 @@ import { CldImage } from "astro-cloudinary";
         class={`flex h-full w-full rounded-lg opacity-0 transition shadow-lg`}
       />
     </div>
-    <div>
+    <div
+      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+    >
       <h4>Compartí esta imagen con tus amigos</h4>
       <a
         href="/postcard/generate"
-        class="rounded-lg bg-red-500 px-3 py-2 text-white">Generar postcard</a
+        class="rounded-lg bg-red-500 px-3 py-2 text-white">Descargar postcard</a
       >
     </div>
   </main>
@@ -26,6 +38,7 @@ import { CldImage } from "astro-cloudinary";
 <script>
   import { getCldOgImageUrl } from "astro-cloudinary/helpers";
   const photo = document.querySelector("#photo-image") as HTMLImageElement;
+  const loading = document.querySelector("#loading") as HTMLElement;
   // get quote from local storage
   const quote = localStorage.getItem("quote");
   // transform quote to json
@@ -50,7 +63,7 @@ import { CldImage } from "astro-cloudinary";
         effects: [{ opacity: 0 }],
       },
       {
-        width: 1200,
+        width: 1000,
         crop: "fit",
         text: {
           color: "white",
@@ -68,7 +81,7 @@ import { CldImage } from "astro-cloudinary";
       },
       {
         publicId: quoteJson.publicId,
-        width: 1200,
+        width: 1000,
         height: 2,
 
         effects: [
@@ -132,6 +145,7 @@ import { CldImage } from "astro-cloudinary";
   };
 
   photo.onload = () => {
+    loading.style.display = "none";
     photo.style.opacity = "1";
   };
 </script>

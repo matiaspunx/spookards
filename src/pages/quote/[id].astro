@@ -7,7 +7,9 @@ const id = params.id;
 
 <Layout title="Spookards">
   <main class="space-y-8">
-    <div class="rounded-lg border border-white/10 p-8 text-center">
+    <div
+      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+    >
       <h2 class="mb-4 font-mona text-xl text-red-400">
         Cita de la película <span id="movie" class="italic"></span>
       </h2>
@@ -18,7 +20,9 @@ const id = params.id;
       </blockquote>
     </div>
 
-    <div class="rounded-lg border border-white/10 p-8 text-center">
+    <div
+      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+    >
       <h2 class="mb-4 font-mona text-xl text-red-400">Ahora sube tu foto</h2>
       <CldUploadWidget
         id="upload-widget"
@@ -43,7 +47,9 @@ const id = params.id;
           },
         }}
       >
-        <button color="brand" class="rounded-lg bg-red-500 px-3 py-2 text-white"
+        <button
+          color="brand"
+          class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:bg-red-700"
           >Subir imagen</button
         >
       </CldUploadWidget>
@@ -58,10 +64,13 @@ const id = params.id;
       </div>
     </div>
 
-    <div class="rounded-lg border border-white/10 p-8 text-center">
+    <div
+      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+    >
       <a
         href="/postcard/generate"
-        class="rounded-lg bg-red-500 px-3 py-2 text-white">Generar postcard</a
+        class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:bg-red-700"
+        >Generar postcard</a
       >
     </div>
     <div>&nbsp;</div>
