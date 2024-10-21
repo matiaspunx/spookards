@@ -8,10 +8,16 @@ import { CldImage } from "astro-cloudinary";
     <div id="photo-container" class="mt-8 place-content-center">
       <div
         id="loading"
-        class="flex h-full min-h-[453px] w-full items-center justify-center rounded-lg shadow-lg transition"
+        class="relative flex h-full min-h-[453px] w-full items-center justify-center rounded-lg shadow-lg transition"
       >
+        <CldImage
+          id="photo-original-big"
+          src=""
+          alt=""
+          class={`photo-original absolute flex h-full w-full rounded-lg opacity-0 z-0 transition shadow-lg`}
+        />
         <h4
-          class="animate-pulse text-center font-marker2 text-2xl text-red-600 shadow-lg"
+          class="absolute z-10 animate-pulse text-center font-marker2 text-2xl text-red-600 shadow-lg"
         >
           Generando tu postcard. Por favor espera...
         </h4>
@@ -23,22 +29,47 @@ import { CldImage } from "astro-cloudinary";
         class={`flex h-full w-full rounded-lg opacity-0 transition shadow-lg`}
       />
     </div>
+
+    <div class="mt-8 flex items-center justify-center gap-x-4 text-center">
+      <h4 class="font-marker2 text-xl text-red-800">Foto original</h4>
+      <div class="aspect-video w-52">
+        <CldImage
+          id="photo-original"
+          src=""
+          alt=""
+          class={`photo-original flex h-full w-full rounded-lg opacity-0 transition shadow-lg`}
+        />
+      </div>
+    </div>
+
     <div
-      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+      class="flex flex-col space-y-4 rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
     >
-      <h4>Compartí esta imagen con tus amigos</h4>
-      <a
-        href="/postcard/generate"
-        class="rounded-lg bg-red-500 px-3 py-2 text-white">Descargar postcard</a
-      >
+      <h4 class="font-marker2 text-xl text-red-800">
+        Compartí esta imagen con tus amigos
+      </h4>
+      <div>
+        <button
+          id="download-btn"
+          class="rounded-lg bg-red-500 px-3 py-2 text-white"
+          >Descargar postcard 📸</button
+        >
+      </div>
     </div>
   </main>
 </Layout>
 
 <script>
-  import { getCldOgImageUrl } from "astro-cloudinary/helpers";
+  import { getCldOgImageUrl, getCldImageUrl } from "astro-cloudinary/helpers";
   const photo = document.querySelector("#photo-image") as HTMLImageElement;
   const loading = document.querySelector("#loading") as HTMLElement;
+  const photoOriginal = document.querySelector(
+    "#photo-original"
+  ) as HTMLImageElement;
+  const photoOriginalBig = document.querySelector(
+    "#photo-original-big"
+  ) as HTMLImageElement;
+  const downloadBtn = document.getElementById("download-btn") as HTMLElement;
   // get quote from local storage
   const quote = localStorage.getItem("quote");
   // transform quote to json
@@ -46,106 +77,136 @@ import { CldImage } from "astro-cloudinary";
 
   console.log(quoteJson);
 
-  const url = getCldOgImageUrl({
-    src: quoteJson.publicId,
-    replaceBackground: `a terrifying halloween background from the horror movie ${quoteJson.movie_en}`,
-    replace: {
-      to: `transform into a monster or creature from the movie ${quoteJson.movie_en}`,
-      from: "people",
-      preserveGeometry: true,
-    },
-    overlays: [
-      {
-        publicId: quoteJson.publicId,
-        width: 1280,
-        height: 720,
-        crop: "fill",
-        effects: [{ opacity: 0 }],
+  function createPostcard() {
+    const url = getCldOgImageUrl({
+      src: quoteJson.publicId,
+      replaceBackground: `a terrifying halloween background from the horror movie ${quoteJson.movie_en}`,
+      replace: {
+        to: `transform into a monster or creature from the movie ${quoteJson.movie_en}`,
+        from: "people",
+        preserveGeometry: true,
       },
-      {
-        width: 1000,
-        crop: "fit",
-        text: {
-          color: "white",
-          fontFamily: "Merriweather",
-          fontSize: 50,
-          fontWeight: "bold",
-          lineSpacing: 10,
-          text: quoteJson.title,
+      overlays: [
+        {
+          publicId: quoteJson.publicId,
+          width: 1280,
+          height: 720,
+          crop: "fill",
+          effects: [{ opacity: 0 }],
         },
-        position: {
-          x: 50,
-          y: 130,
-          gravity: "south_west",
+        {
+          width: 1000,
+          crop: "fit",
+          text: {
+            color: "white",
+            fontFamily: "Merriweather",
+            fontSize: 50,
+            fontWeight: "bold",
+            lineSpacing: 10,
+            text: quoteJson.title,
+          },
+          position: {
+            x: 50,
+            y: 130,
+            gravity: "south_west",
+          },
         },
-      },
-      {
-        publicId: quoteJson.publicId,
-        width: 1000,
-        height: 2,
+        {
+          publicId: quoteJson.publicId,
+          width: 1000,
+          height: 2,
 
-        effects: [
-          {
-            colorize: "100,co_white",
-            opacity: 70,
+          effects: [
+            {
+              colorize: "100,co_white",
+              opacity: 70,
+            },
+          ],
+          position: {
+            x: 50,
+            y: 100,
+            gravity: "south_west",
           },
-        ],
-        position: {
-          x: 50,
-          y: 100,
-          gravity: "south_west",
         },
-      },
-      {
-        crop: "fit",
-        width: 1000,
-        text: {
-          color: "white",
-          fontFamily: "Lato",
-          fontSize: 30,
-          fontWeight: "bold",
-          text: `${quoteJson.author} (${quoteJson.movie_en})`,
-        },
-        position: {
-          x: 50,
-          y: 50,
-          gravity: "south_west",
-        },
-      },
-      {
-        text: {
-          color: "white",
-          fontFamily: "Lato",
-          fontSize: 23,
-          fontWeight: "normal",
-          text: "created with @spookards",
-          letterSpacing: 0,
-        },
-        effects: [
-          {
-            colorize: "100,co_white",
-            opacity: 50,
+        {
+          crop: "fit",
+          width: 1000,
+          text: {
+            color: "white",
+            fontFamily: "Lato",
+            fontSize: 30,
+            fontWeight: "bold",
+            text: `${quoteJson.author} (${quoteJson.movie_en})`,
           },
-        ],
-        position: {
-          x: 20,
-          y: 20,
-          gravity: "south_east",
+          position: {
+            x: 50,
+            y: 50,
+            gravity: "south_west",
+          },
         },
-      },
-    ],
+        {
+          text: {
+            color: "white",
+            fontFamily: "Lato",
+            fontSize: 23,
+            fontWeight: "normal",
+            text: "created with @spookards",
+            letterSpacing: 0,
+          },
+          effects: [
+            {
+              colorize: "100,co_white",
+              opacity: 50,
+            },
+          ],
+          position: {
+            x: 20,
+            y: 20,
+            gravity: "south_east",
+          },
+        },
+      ],
+    });
+
+    photo.src = url;
+
+    photo.onerror = (error) => {
+      photo.style.opacity = "0";
+      console.log("Error al generar la imagen", error);
+      return error;
+    };
+
+    photo.onload = () => {
+      loading.style.display = "none";
+      photo.style.opacity = "1";
+    };
+  }
+
+  const urlOriginal = getCldOgImageUrl({
+    src: quoteJson.publicId,
   });
 
-  photo.src = url;
+  photoOriginal.src = urlOriginal;
 
-  photo.onerror = (error) => {
-    photo.style.opacity = "0";
-    console.log("Error al generar la imagen", error);
-    return error;
+  photoOriginal.onload = () => {
+    photoOriginal.style.opacity = "1";
   };
 
-  photo.onload = () => {
-    loading.style.display = "none";
-    photo.style.opacity = "1";
+  photoOriginalBig.src = urlOriginal;
+
+  photoOriginalBig.onload = () => {
+    photoOriginalBig.style.opacity = ".35";
+    setTimeout(() => {
+      createPostcard();
+    }, 5000);
   };
+
+  downloadBtn.addEventListener("click", () => {
+    const url = getCldImageUrl({ src: quoteJson.publicId, format: "avif" });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "image.avif";
+    a.click();
+  });
 </script>
