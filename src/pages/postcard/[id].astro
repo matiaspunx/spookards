@@ -4,14 +4,21 @@ import { CldImage } from "astro-cloudinary";
 ---
 
 <Layout title="Spookards">
-  <main class="space-y-8">
+  <main class="breackout space-y-8">
     <div id="photo-container" class="mt-8 place-content-center">
       <CldImage
         id="photo-image"
         src=""
         alt=""
-        class={`flex h-full w-full rounded-lg opacity-0 transition`}
+        class={`flex h-full w-full rounded-lg opacity-0 transition shadow-lg`}
       />
+    </div>
+    <div>
+      <h4>Compartí esta imagen con tus amigos</h4>
+      <a
+        href="/postcard/generate"
+        class="rounded-lg bg-red-500 px-3 py-2 text-white">Generar postcard</a
+      >
     </div>
   </main>
 </Layout>
@@ -28,33 +35,27 @@ import { CldImage } from "astro-cloudinary";
 
   const url = getCldOgImageUrl({
     src: quoteJson.publicId,
-    effects: [
-      {
-        background: "rgb:010A44",
-      },
-      {
-        color: "rgb:2A005F",
-        colorize: "100",
-      },
-      {
-        gradientFade: "symmetric",
-      },
-    ],
+    replaceBackground: `a terrifying halloween background from the horror movie ${quoteJson.movie_en}`,
+    replace: {
+      to: `transform into a monster or creature from the movie ${quoteJson.movie_en}`,
+      from: "people",
+      preserveGeometry: true,
+    },
     overlays: [
       {
         publicId: quoteJson.publicId,
-        width: 1200,
-        height: 630,
+        width: 1280,
+        height: 720,
         crop: "fill",
-        effects: [{ opacity: 20 }],
+        effects: [{ opacity: 0 }],
       },
       {
-        width: 1000,
+        width: 1200,
         crop: "fit",
         text: {
           color: "white",
           fontFamily: "Merriweather",
-          fontSize: 58,
+          fontSize: 50,
           fontWeight: "bold",
           lineSpacing: 10,
           text: quoteJson.title,
@@ -67,8 +68,9 @@ import { CldImage } from "astro-cloudinary";
       },
       {
         publicId: quoteJson.publicId,
-        width: 1000,
+        width: 1200,
         height: 2,
+
         effects: [
           {
             colorize: "100,co_white",
@@ -82,12 +84,14 @@ import { CldImage } from "astro-cloudinary";
         },
       },
       {
+        crop: "fit",
+        width: 1000,
         text: {
           color: "white",
           fontFamily: "Lato",
-          fontSize: 37,
+          fontSize: 30,
           fontWeight: "bold",
-          text: quoteJson.author,
+          text: `${quoteJson.author} (${quoteJson.movie_en})`,
         },
         position: {
           x: 50,
@@ -95,10 +99,37 @@ import { CldImage } from "astro-cloudinary";
           gravity: "south_west",
         },
       },
+      {
+        text: {
+          color: "white",
+          fontFamily: "Lato",
+          fontSize: 23,
+          fontWeight: "normal",
+          text: "created with @spookards",
+          letterSpacing: 0,
+        },
+        effects: [
+          {
+            colorize: "100,co_white",
+            opacity: 50,
+          },
+        ],
+        position: {
+          x: 20,
+          y: 20,
+          gravity: "south_east",
+        },
+      },
     ],
   });
 
   photo.src = url;
+
+  photo.onerror = (error) => {
+    photo.style.opacity = "0";
+    console.log("Error al generar la imagen", error);
+    return error;
+  };
 
   photo.onload = () => {
     photo.style.opacity = "1";

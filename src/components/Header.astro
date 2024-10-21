@@ -3,9 +3,9 @@
 ---
 
 <header class="mt-8 py-4 text-center">
-  <a href="/" class="group">
+  <a href="/" class="group" id="logo">
     <h1
-      class="mb-6 flex -rotate-3 justify-center text-pretty text-center font-marker text-4xl font-bold"
+      class="mb-6 inline-flex -rotate-3 justify-center text-pretty text-center font-marker text-4xl font-bold shadow-lg"
     >
       <span
         class="bg-gradient-to-r from-red-600 via-pink-600 to-red-900 bg-clip-text text-transparent"
@@ -15,5 +15,16 @@
         >🔪</span
       >
     </h1>
+    <audio id="cuchillo">
+      <source src="/slashkut.mp3" type="audio/mpeg" />
+    </audio>
   </a>
 </header>
+<script>
+  const logo = document.getElementById("logo") as HTMLElement;
+  logo.addEventListener("mouseover", () => {
+    const cuchillo = document.querySelector("#cuchillo") as HTMLAudioElement;
+    cuchillo.volume = 0.25;
+    cuchillo.play();
+  });
+</script>

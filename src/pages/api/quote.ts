@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(import.meta.env.GEMINI_API_KEY);
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.formData();
   const movie = data.get("movie");
-  const quote = `crea una cita de la pelicula ${movie} en español. El resultado deberia ser en formato json con los valores title, movie y author de la cita. Revisa bien que el json esté bien escrito y que no haya errores en el texto.`;
+  const quote = `crea una cita de la pelicula ${movie} en español. El resultado deberia ser en formato json con los valores title, movie, movie_en y author de la cita. Revisa bien que el json esté bien escrito y formateado para que no devuelva errores y que no haya errores ortograficos en el texto, la propiedad movie_en tiene que ser el titulo en ingles de la pelicula.`;
 
   if (!movie) {
     return new Response("No se envio ninguna pelicula", { status: 400 });

@@ -70,14 +70,20 @@ const { title, description = "Spookards son las mejores tarjetas de terror!" } =
   }
   html {
     font-family: system-ui, sans-serif;
-    background: #13151a;
+    background-color: #13151a;
+    background-image: url(/noise-extra.webp), url(/bg3.avif);
+    background-size: 400px, cover;
+    background-repeat: repeat, no-repeat;
+    background-blend-mode: overlay, color-dodge;
+
+    min-height: 100vh;
   }
 
   /* content grid */
   .content-grid {
     --padding-inline: 2rem;
     --content-max-width: 80ch;
-    --breackout-max-width: 90ch;
+    --breackout-max-width: 100ch;
     --breackout-size: calc(
       (var(--breackout-max-width) - var(--content-max-width)) / 2
     );

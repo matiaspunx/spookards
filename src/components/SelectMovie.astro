@@ -1,15 +1,17 @@
 ---
 import { type Movie } from "@/types/Types";
-import { saveMovies, getMovies } from "@/lib/sbfunctions";
+import { getMovies } from "@/lib/sbfunctions";
 
 const movies: Movie[] = await getMovies();
 ---
 
-<div class="formCard rounded-lg border border-white/10 px-6 py-6 text-center">
+<div
+  class="formCard rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+>
   <form action="#" method="post" id="form">
     <label
       for="movie"
-      class="font-marker2 flex items-center justify-center text-4xl text-red-500"
+      class="flex items-center justify-center font-marker2 text-4xl text-red-500"
       >¿Cual es tu pelicula de terror favorita? <div>
         <button
           id="sm-play"
@@ -17,7 +19,7 @@ const movies: Movie[] = await getMovies();
           class="font-emoji transition hover:-rotate-3 hover:scale-110"
           >🔊</button
         >
-        <audio>
+        <audio id="scary-movie">
           <source src="/what-is-your-scary-movie.mp3" type="audio/mpeg" />
         </audio>
       </div></label
@@ -28,13 +30,13 @@ const movies: Movie[] = await getMovies();
       id="movie"
       name="movie"
       placeholder="Nombre de la película"
-      class="my-6 w-full rounded-md border border-red-900 bg-gradient-to-r px-3 py-2 text-2xl text-black"
+      class="my-6 w-full rounded-md border border-red-900 bg-red-900/20 px-3 py-2 text-2xl text-red-900 placeholder-red-400/20 outline-none focus-visible:bg-red-900/30"
     />
 
     <div class="py-2">
-      <h3 class="font-mona text-sm italic text-red-300">
+      <h2 class="font-mona text-sm italic text-red-300">
         No se te ocurre ninguna pelicula, acá tenés unas sugerencias:
-      </h3>
+      </h2>
       <div id="sugerencias" class="flex flex-wrap justify-center gap-4 py-4">
         {
           movies.map((movie) => (
@@ -51,7 +53,7 @@ const movies: Movie[] = await getMovies();
 
     <button
       type="submit"
-      class="rounded-md bg-red-600 px-4 py-2 font-mona text-white"
+      class="rounded-md bg-red-600 px-6 py-2 font-mona text-xl text-white transition hover:bg-red-700"
       >Enviar</button
     >
   </form>
@@ -66,7 +68,7 @@ const movies: Movie[] = await getMovies();
   // audio
   smplay.addEventListener("click", () => {
     smplay.innerText = "🔊";
-    const audio = document.querySelector("audio") as HTMLAudioElement;
+    const audio = document.querySelector("#scary-movie") as HTMLAudioElement;
     audio.play();
   });
 
