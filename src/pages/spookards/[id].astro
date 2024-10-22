@@ -9,7 +9,7 @@ import { CldImage } from "astro-cloudinary";
     <div id="photo-container" class="mt-8 place-content-center">
       <div
         id="loading"
-        class="relative flex h-full min-h-[453px] w-full items-center justify-center rounded-lg shadow-lg transition"
+        class="relative flex h-full min-h-[172px] w-full items-center justify-center rounded-lg shadow-lg transition md:min-h-[453px]"
       >
         <div class="absolute z-0 rounded-lg bg-black">
           <CldImage
@@ -78,6 +78,7 @@ import { CldImage } from "astro-cloudinary";
 
 <script>
   import { getCldOgImageUrl } from "astro-cloudinary/helpers";
+
   const photo = document.querySelector("#photo-image") as HTMLImageElement;
   const loading = document.querySelector("#loading") as HTMLElement;
   const photoOriginal = document.querySelector(
@@ -205,10 +206,13 @@ import { CldImage } from "astro-cloudinary";
       postcardUrl = url;
 
       quoteJson.spookardsUrl = url;
-      localStorage.setItem("quotes", JSON.stringify(quotes));
+
       // Add the newly created spookard only if it's not already in the DOM
       if (!isPostcardInDom(quoteJson.spookardsUrl)) {
-        addSpookardToDOM(quoteJson);
+        if (quoteJson.spookardsUrl !== "undefined" || !quoteJson.spookardsUrl) {
+          addSpookardToDOM(quoteJson);
+          localStorage.setItem("quotes", JSON.stringify(quotes));
+        }
       }
     };
   }
@@ -234,6 +238,9 @@ import { CldImage } from "astro-cloudinary";
 
   // Function to add a single spookard to the DOM
   const addSpookardToDOM = (postcard: { spookardsUrl: string }) => {
+    if (postcard.spookardsUrl === "undefined" || !postcard.spookardsUrl) {
+      return;
+    }
     const card = document.createElement("div");
     card.className =
       "aspect-video relative overflow-hidden rounded-lg bg-black/30 shadow-lg";
@@ -256,6 +263,13 @@ import { CldImage } from "astro-cloudinary";
   const isPostcardInDom = (url: string) => {
     const existingImages = latestsCards.querySelectorAll("img");
     return Array.from(existingImages).some((img) => img.src === url);
+  };
+
+  const isPostcardLinkInDom = (url: string) => {
+    const existingA = latestsCards.querySelectorAll("a");
+    return Array.from(existingA).some(
+      (a) => a.href === url || a.href !== "undefined"
+    );
   };
 
   // Initialize latest spookards on first load
