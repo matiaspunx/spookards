@@ -9,7 +9,7 @@ const movies: Movie[] = await getMovies();
 <div
   class="formCard rounded-lg border border-black/50 bg-black/50 px-6 py-6 text-center shadow-lg"
 >
-  <form action="#" method="post" id="form">
+  <form method="post" id="form">
     <label
       for="movie"
       class="flex items-center justify-center gap-x-2 font-marker2 text-2xl text-red-500 md:text-3xl"
@@ -43,7 +43,7 @@ const movies: Movie[] = await getMovies();
           movies.map((movie) => (
             <button
               type="button"
-              class="group relative inline-block px-1 font-mona text-white before:absolute before:bottom-0 before:start-0 before:-z-[1] before:h-0.5 before:w-full before:origin-left before:scale-x-0 before:bg-red-700 before:transition hover:text-white/80 hover:before:scale-x-100"
+              class="relative inline-block px-1 font-mona text-white before:absolute before:bottom-0 before:start-0 before:-z-[1] before:h-0.5 before:w-full before:origin-left before:scale-x-0 before:bg-red-700 before:transition hover:text-white/80 hover:before:scale-x-100"
             >
               {movie.title}
             </button>
@@ -52,11 +52,14 @@ const movies: Movie[] = await getMovies();
       </div>
     </div>
 
-    <button
-      type="submit"
-      class="group inline-flex items-center gap-x-2 rounded-md bg-red-600 px-6 py-2 font-mona text-2xl text-white transition hover:-rotate-1 hover:scale-110 hover:bg-red-800"
-      >Generar cita <IconQuote class="group-hover:animate-pulse" /></button
-    >
+    <div class="flex flex-col items-center justify-center gap-y-2">
+      <button
+        type="submit"
+        class="group inline-flex items-center gap-x-2 rounded-md bg-red-600 px-6 py-2 font-mona text-2xl text-white transition hover:-rotate-1 hover:scale-110 hover:bg-red-800"
+        >Generar cita <IconQuote class="group-hover:animate-pulse" /></button
+      >
+      <span id="error-msg" class="hidden font-mona text-sm text-red-500"></span>
+    </div>
   </form>
 </div>
 <script>
@@ -65,6 +68,7 @@ const movies: Movie[] = await getMovies();
   const sugerencias = document.getElementById("sugerencias") as HTMLElement;
   const movie = document.getElementById("movie") as HTMLInputElement;
   const form = document.getElementById("form") as HTMLFormElement;
+  const errorMsg = document.getElementById("error-msg") as HTMLElement;
 
   // audio
   smplay.addEventListener("click", () => {
@@ -114,7 +118,8 @@ const movies: Movie[] = await getMovies();
 
       navigate(`/quote/generate`);
     } else {
-      alert("Error al recibir quote");
+      errorMsg.innerText = "No ingresaste ninguna película";
+      errorMsg.classList.remove("hidden");
     }
   }
 </script>

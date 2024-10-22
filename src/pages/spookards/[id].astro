@@ -1,4 +1,5 @@
 ---
+import IconBack from "@/components/icons/iconBack.astro";
 import IconDownload from "@/components/icons/iconDownload.astro";
 import IconShare from "@/components/icons/iconShare.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -24,7 +25,7 @@ import { CldImage } from "astro-cloudinary";
         <h4
           class="absolute z-10 animate-pulse text-center font-marker2 text-2xl text-red-600 drop-shadow-lg"
         >
-          Generando tu postcard. Por favor espera...
+          Creando tu spookard. Por favor espera...
         </h4>
       </div>
       <CldImage
@@ -51,7 +52,7 @@ import { CldImage } from "astro-cloudinary";
       class="flex flex-col space-y-4 rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
     >
       <h4 class="font-marker2 text-xl text-red-800">
-        Compartí esta imagen con tus amigos
+        Compartí tu spookard con amigos o creá una nueva
       </h4>
       <div class="flex items-center justify-center gap-x-4">
         <button
@@ -61,15 +62,20 @@ import { CldImage } from "astro-cloudinary";
             class="group-hover:animate-bounce"
           /></button
         >
+
+        <a
+          href="/"
+          class="inline-flex items-center gap-x-2 rounded-lg border border-red-600 px-4 py-2 text-center font-mona text-xl text-red-500 hover:-rotate-1 hover:scale-105"
+        >
+          <IconBack /> Crear una nueva spookard
+        </a>
       </div>
     </div>
 
     <div
       class="mt-8 rounded-lg border border-black/50 bg-black/80 px-6 py-6 text-center shadow-lg"
     >
-      <h4 class="font-marker2 text-3xl text-red-800">
-        Tus últimos postcards generados
-      </h4>
+      <h4 class="font-marker2 text-3xl text-red-800">Tus últimos spookards</h4>
       <div
         id="latests-cards"
         class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2"
