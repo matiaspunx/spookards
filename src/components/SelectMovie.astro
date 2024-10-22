@@ -74,7 +74,6 @@ const movies: Movie[] = await getMovies();
   });
 
   // form
-
   const bntsugs = sugerencias.querySelectorAll(
     "button"
   ) as NodeListOf<HTMLButtonElement>;
@@ -82,7 +81,7 @@ const movies: Movie[] = await getMovies();
   bntsugs.forEach((btn, i) => {
     btn.addEventListener("click", () => {
       movie.value = btn.innerText;
-      console.log(movie.value);
+      //console.log(movie.value);
     });
   });
 
@@ -101,8 +100,16 @@ const movies: Movie[] = await getMovies();
 
     if (response.ok) {
       const quote = await response.json();
-      // save quote to local storage
-      localStorage.setItem("quote", JSON.stringify(quote));
+
+      // Retrieve the current quotes array from local storage, or initialize a new array if none exist
+      const currentQuotes = JSON.parse(localStorage.getItem("quotes") || "[]");
+
+      // Add the new quote to the array
+      currentQuotes.push(quote);
+
+      // Save the updated array back to local storage
+      localStorage.setItem("quotes", JSON.stringify(currentQuotes));
+
       navigate(`/quote/generate`);
     } else {
       alert("Error al recibir quote");

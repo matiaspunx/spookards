@@ -1,4 +1,5 @@
 ---
+import IconShare from "@/components/icons/iconShare.astro";
 import Layout from "@/layouts/Layout.astro";
 import { CldImage } from "astro-cloudinary";
 ---
@@ -10,12 +11,15 @@ import { CldImage } from "astro-cloudinary";
         id="loading"
         class="relative flex h-full min-h-[453px] w-full items-center justify-center rounded-lg shadow-lg transition"
       >
-        <CldImage
-          id="photo-original-big"
-          src=""
-          alt=""
-          class={`photo-original absolute flex h-full w-full rounded-lg opacity-0 z-0 transition shadow-lg`}
-        />
+        <div class="absolute z-0 rounded-lg bg-black">
+          <CldImage
+            id="photo-original-big"
+            src=""
+            alt=""
+            class={`photo-original flex h-full w-full rounded-lg opacity-0 z-0 transition shadow-lg`}
+          />
+        </div>
+
         <h4
           class="absolute z-10 animate-pulse text-center font-marker2 text-2xl text-red-600 shadow-lg"
         >
@@ -48,19 +52,32 @@ import { CldImage } from "astro-cloudinary";
       <h4 class="font-marker2 text-xl text-red-800">
         Compartí esta imagen con tus amigos
       </h4>
-      <div>
+      <div class="flex items-center justify-center gap-x-4">
         <button
           id="download-btn"
-          class="rounded-lg bg-red-500 px-3 py-2 text-white"
-          >Descargar postcard 📸</button
+          class="flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 text-white"
+          >Descargar postcard <IconShare /></button
         >
+      </div>
+    </div>
+
+    <div
+      class="mt-8 rounded-lg border border-black/50 bg-black/80 px-6 py-6 text-center shadow-lg"
+    >
+      <h4 class="font-marker2 text-3xl text-red-800">
+        Tus últimos postcards generados
+      </h4>
+      <div
+        id="latests-cards"
+        class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2"
+      >
       </div>
     </div>
   </main>
 </Layout>
 
 <script>
-  import { getCldOgImageUrl, getCldImageUrl } from "astro-cloudinary/helpers";
+  import { getCldOgImageUrl } from "astro-cloudinary/helpers";
   const photo = document.querySelector("#photo-image") as HTMLImageElement;
   const loading = document.querySelector("#loading") as HTMLElement;
   const photoOriginal = document.querySelector(
@@ -70,10 +87,15 @@ import { CldImage } from "astro-cloudinary";
     "#photo-original-big"
   ) as HTMLImageElement;
   const downloadBtn = document.getElementById("download-btn") as HTMLElement;
-  // get quote from local storage
-  const quote = localStorage.getItem("quote");
-  // transform quote to json
-  const quoteJson = quote ? JSON.parse(quote) : null;
+  const latestsCards = document.getElementById("latests-cards") as HTMLElement;
+
+  // Get the array of quotes from local storage
+  const quotes = JSON.parse(localStorage.getItem("quotes") || "[]");
+
+  // Get the last quote
+  const quoteJson = quotes.length > 0 ? quotes[quotes.length - 1] : null;
+
+  let postcardUrl = "";
 
   console.log(quoteJson);
 
@@ -178,7 +200,14 @@ import { CldImage } from "astro-cloudinary";
 
     photo.onload = () => {
       loading.style.display = "none";
+
       photo.style.opacity = "1";
+      photoOriginalBig.style.opacity = "0";
+      postcardUrl = url;
+
+      quoteJson.spookardsUrl = url;
+      localStorage.setItem("quotes", JSON.stringify(quotes));
+      lastestSpookards();
     };
   }
 
@@ -195,18 +224,40 @@ import { CldImage } from "astro-cloudinary";
   photoOriginalBig.src = urlOriginal;
 
   photoOriginalBig.onload = () => {
-    photoOriginalBig.style.opacity = ".35";
+    photoOriginalBig.style.opacity = ".3";
     setTimeout(() => {
       createPostcard();
-    }, 5000);
+    }, 1000);
+  };
+
+  const lastestSpookards = () => {
+    if (quotes.length === 0) {
+      return;
+    }
+
+    quotes.forEach((postcard: { spookardsUrl: string }) => {
+      const card = document.createElement("div");
+      card.className = "aspect-video w-52";
+      const a = document.createElement("a");
+      a.href = postcard.spookardsUrl;
+      a.target = "_blank";
+
+      const img = document.createElement("img");
+      img.src = postcard.spookardsUrl;
+      img.alt = "Postcard";
+
+      a.appendChild(img);
+      card.appendChild(a);
+      latestsCards.appendChild(card);
+    });
   };
 
   downloadBtn.addEventListener("click", () => {
-    const url = getCldImageUrl({ src: quoteJson.publicId, format: "avif" });
-
     const a = document.createElement("a");
-    a.href = url;
-    a.download = "image.avif";
+    const nameImage = quoteJson.publicId.split("/").pop();
+    a.href = postcardUrl;
+    a.download = `${nameImage}.avif`;
+    a.target = "_blank";
     a.click();
   });
 </script>
