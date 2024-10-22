@@ -2,6 +2,7 @@
 import { defineConfig, passthroughImageService } from "astro/config";
 import vercel from "@astrojs/vercel/serverless";
 import tailwind from "@astrojs/tailwind";
+import { seoConfig } from "./src/utils/seoConfig";
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
     enabled: false,
   },
   output: "server",
+  site: seoConfig.baseURL,
   adapter: vercel(),
   integrations: [tailwind()],
   vite: {

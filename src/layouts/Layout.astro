@@ -2,27 +2,31 @@
 //import { ViewTransitions } from "astro:transitions";
 import Footer from "@/components/Footer.astro";
 import Header from "src/components/Header.astro";
+import SEO from "@/components/SEO.astro";
 
 interface Props {
   title: string;
   description?: string;
+  canonical?: string;
+  image?: string;
 }
 
-const { title, description = "Spookards son las mejores tarjetas de terror!" } =
-  Astro.props as Props;
+const {
+  title,
+  description = "Spookards las mejores postcards de terror!",
+  canonical,
+  image,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" class="overflow-x-hidden">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/favicon-32x32.png" />
-
-    <title>{title}</title>
+    <SEO title={title} desc={description} canonical={canonical} image={image} />
   </head>
-  <body>
+  <body
+    class="selection:bg-primary selection:text-secondary [&_:focus-visible]:ring-primary [&_:focus-visible]:outline-none [&_:focus-visible]:ring-2"
+  >
     <div class="content-grid">
       <Header />
       <slot />
@@ -74,7 +78,8 @@ const { title, description = "Spookards son las mejores tarjetas de terror!" } =
     font-family: system-ui, sans-serif;
     background-color: #13151a;
     background-image: url(/noise-extra.webp), url(/bg3.avif);
-    background-size: 400px, cover;
+    background-size: 400px, contain;
+    background-attachment: inherit, fixed;
     background-repeat: repeat, no-repeat;
     background-blend-mode: overlay, color-dodge;
 

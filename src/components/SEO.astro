@@ -1,0 +1,69 @@
+---
+interface Props {
+  title: string;
+  desc: string;
+  canonical?: string;
+  image?: string;
+}
+
+const {
+  title,
+  desc,
+  canonical,
+  image = "https://res.cloudinary.com/antirockstars/image/upload/v1729581807/og_ri2nmd.webp",
+} = Astro.props;
+
+const determineCanonicalURL = () => {
+  if (Astro.url.host.includes("localhost")) return "http://localhost:4321";
+  return canonical || Astro.url.pathname;
+};
+const canonicalURL = new URL(determineCanonicalURL(), Astro.site);
+---
+
+<title>{title}</title>
+
+<meta charset="UTF-8" />
+<meta name="description" content={desc} />
+
+<link rel="preconnect" href="https://res.cloudinary.com" />
+
+<link rel="canonical" href={canonicalURL} />
+<meta name="viewport" content="width=device-width" />
+<meta name="theme-color" content="#222222" />
+
+<meta
+  name="keywords"
+  content="postcards, spookards, IA images, creativity, movie quotes, movies, scary quotes, quotes, spooky, spooky quotes"
+/>
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@__amti" />
+<meta name="twitter:creator" content="@__amti" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={new URL(image, Astro.url)} />
+
+<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:site_name" content="Ocultismo AR" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_AR" />
+
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/iso.png" />
+<meta name="msapplication-config" content="/browserconfig.xml" />
+<link
+  rel="preload"
+  href="https://rsms.me/inter/inter.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript
+  ><link rel="stylesheet" href="https://rsms.me/inter/inter.css" /></noscript
+>
