@@ -116,7 +116,7 @@ const id = params.id;
         info: { public_id: string };
       }>
     ) => {
-      console.log("clduploadwidget:success", e.detail);
+      //console.log("clduploadwidget:success", e.detail);
       const publicId = e.detail.info.public_id;
       showPhoto(publicId);
     }) as EventListener);
