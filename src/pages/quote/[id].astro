@@ -1,6 +1,8 @@
 ---
 import { CldUploadWidget, CldImage } from "astro-cloudinary";
 import Layout from "@/layouts/Layout.astro";
+import IconUpload from "@/components/icons/iconUpload.astro";
+import IconWand from "@/components/icons/iconWand.astro";
 const params = Astro.params;
 const id = params.id;
 ---
@@ -8,7 +10,7 @@ const id = params.id;
 <Layout title="Spookards">
   <main class="space-y-8">
     <div
-      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+      class="rounded-lg border border-black/80 bg-black/50 px-6 py-6 text-center shadow-lg"
     >
       <h2 class="mb-4 font-mona text-xl text-red-400">
         Cita de la película <span id="movie" class="italic"></span>
@@ -23,19 +25,26 @@ const id = params.id;
     <div
       class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
     >
-      <h2 class="mb-4 font-mona text-xl text-red-400">Ahora sube tu foto</h2>
+      <h2
+        class="mb-4 text-balance rounded-lg bg-red-700/40 p-4 font-mona text-xl text-red-400"
+      >
+        Ahora sube tu foto para convertirte en un personaje imaginario de tu
+        pelicula de terror favorita.
+      </h2>
       <CldUploadWidget
         id="upload-widget"
         uploadPreset="spookards-images"
         options={{
           sources: ["local", "camera"],
+          folder: "spookards",
+          resourceType: "image",
+          maxImageFileSize: 2500000,
           multiple: false,
           maxFiles: 1,
           language: "es",
           text: {
             es: {
               or: "O",
-
               menu: {
                 files: "Subir desde tu dispositivo",
               },
@@ -48,9 +57,8 @@ const id = params.id;
         }}
       >
         <button
-          color="brand"
-          class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:scale-110 hover:bg-red-700"
-          >Subir imagen</button
+          class="inline-flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 font-mona text-2xl text-white transition hover:rotate-1 hover:scale-110 hover:bg-red-700"
+          >Subir imagen <IconUpload /></button
         >
       </CldUploadWidget>
 
@@ -59,7 +67,7 @@ const id = params.id;
           id="photo-image"
           src=""
           alt=""
-          class={`flex h-full w-full rounded-lg opacity-0 transition`}
+          class={`flex h-full w-full aspect-video rounded-lg opacity-0 transition`}
         />
       </div>
     </div>
@@ -67,10 +75,16 @@ const id = params.id;
     <div
       class="flex flex-col items-center gap-4 rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
     >
+      <h3
+        class="mb-4 text-balance rounded-lg bg-red-700/40 p-4 font-mona text-xl text-red-400"
+      >
+        ¿Listo para crear tu postcard? pulsa el botón para unir la cita de la
+        pelicula con tu foto y crear tu <strong>spookard</strong>
+      </h3>
       <button
         id="postcard-btn"
-        class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:scale-110 hover:bg-red-700"
-        >Generar postcard</button
+        class="inline-flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 font-mona text-2xl text-white transition hover:-rotate-1 hover:scale-110 hover:bg-red-700"
+        >Generar postcard <IconWand /></button
       >
       <span id="error-img" class="hidden font-mona text-sm text-red-500"></span>
     </div>
@@ -145,7 +159,7 @@ const id = params.id;
   };
 
   postcardBtn.addEventListener("click", () => {
-    //navigate(`/${quoteJson.publicId}`);
+    errorImg.classList.add("hidden");
     if (quoteJson && quoteJson.publicId) {
       navigate(`/${quoteJson.publicId}`);
     } else {

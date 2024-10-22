@@ -56,8 +56,10 @@ import { CldImage } from "astro-cloudinary";
       <div class="flex items-center justify-center gap-x-4">
         <button
           id="download-btn"
-          class="flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 text-white transition hover:scale-110 hover:bg-red-700"
-          >Descargar postcard <IconDownload /></button
+          class="group flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 font-mona text-xl text-white transition hover:rotate-1 hover:scale-110 hover:bg-red-700"
+          >Descargar postcard <IconDownload
+            class="group-hover:animate-bounce"
+          /></button
         >
       </div>
     </div>
@@ -111,6 +113,14 @@ import { CldImage } from "astro-cloudinary";
         from: "people",
         preserveGeometry: true,
       },
+      effects: [
+        {
+          gradientFade: "20,y_-0.7",
+        },
+        {
+          background: "rgb:131313",
+        },
+      ],
       overlays: [
         {
           publicId: quoteJson.publicId,
