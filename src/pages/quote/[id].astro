@@ -49,7 +49,7 @@ const id = params.id;
       >
         <button
           color="brand"
-          class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:bg-red-700"
+          class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:scale-110 hover:bg-red-700"
           >Subir imagen</button
         >
       </CldUploadWidget>
@@ -65,15 +65,15 @@ const id = params.id;
     </div>
 
     <div
-      class="rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
+      class="flex flex-col items-center gap-4 rounded-lg border border-black/50 bg-black/30 px-6 py-6 text-center shadow-lg"
     >
       <button
         id="postcard-btn"
-        class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:bg-red-700"
+        class="rounded-lg bg-red-500 px-3 py-2 text-2xl text-white transition hover:scale-110 hover:bg-red-700"
         >Generar postcard</button
       >
+      <span id="error-img" class="hidden font-mona text-sm text-red-500"></span>
     </div>
-    <div>&nbsp;</div>
   </main>
 </Layout>
 <script>
@@ -86,6 +86,7 @@ const id = params.id;
 
   const blockquote = document.getElementById("blockquote") as HTMLElement;
   const movie = document.getElementById("movie") as HTMLElement;
+  const errorImg = document.getElementById("error-img") as HTMLElement;
 
   // get the array of quotes from local storage
   const quotes = JSON.parse(localStorage.getItem("quotes") || "[]");
@@ -135,8 +136,6 @@ const id = params.id;
     quoteJson.publicId = publicId;
     quoteJson.url = url;
 
-    //console.log(quoteJson);
-    //localStorage.setItem("quote", JSON.stringify(quoteJson));
     // Update the specific quote in the array if needed
     localStorage.setItem("quotes", JSON.stringify(quotes));
   };
@@ -145,6 +144,10 @@ const id = params.id;
     //navigate(`/${quoteJson.publicId}`);
     if (quoteJson && quoteJson.publicId) {
       navigate(`/${quoteJson.publicId}`);
+    } else {
+      errorImg.innerText =
+        "Para poder generar el postcard debes subir una foto";
+      errorImg.classList.remove("hidden");
     }
   });
 </script>

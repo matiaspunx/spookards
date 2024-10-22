@@ -53,7 +53,7 @@ const movies: Movie[] = await getMovies();
 
     <button
       type="submit"
-      class="rounded-md bg-red-600 px-6 py-2 font-mona text-xl text-white transition hover:bg-red-700"
+      class="rounded-md bg-red-600 px-6 py-2 font-mona text-xl text-white transition hover:scale-110 hover:bg-red-700"
       >Generar cita</button
     >
   </form>
@@ -82,6 +82,7 @@ const movies: Movie[] = await getMovies();
     btn.addEventListener("click", () => {
       movie.value = btn.innerText;
       //console.log(movie.value);
+      generateQuote();
     });
   });
 

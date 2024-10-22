@@ -55,7 +55,7 @@ import { CldImage } from "astro-cloudinary";
       <div class="flex items-center justify-center gap-x-4">
         <button
           id="download-btn"
-          class="flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 text-white"
+          class="flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 text-white transition hover:scale-110 hover:bg-red-700"
           >Descargar postcard <IconShare /></button
         >
       </div>
@@ -200,14 +200,16 @@ import { CldImage } from "astro-cloudinary";
 
     photo.onload = () => {
       loading.style.display = "none";
-
       photo.style.opacity = "1";
       photoOriginalBig.style.opacity = "0";
       postcardUrl = url;
 
       quoteJson.spookardsUrl = url;
       localStorage.setItem("quotes", JSON.stringify(quotes));
-      lastestSpookards();
+      // Add the newly created spookard only if it's not already in the DOM
+      if (!isPostcardInDom(quoteJson.spookardsUrl)) {
+        addSpookardToDOM(quoteJson);
+      }
     };
   }
 
@@ -230,27 +232,40 @@ import { CldImage } from "astro-cloudinary";
     }, 1000);
   };
 
-  const lastestSpookards = () => {
-    if (quotes.length === 0) {
-      return;
-    }
+  // Function to add a single spookard to the DOM
+  const addSpookardToDOM = (postcard: { spookardsUrl: string }) => {
+    const card = document.createElement("div");
+    card.className =
+      "aspect-video relative overflow-hidden rounded-lg bg-black/30 shadow-lg";
+    const a = document.createElement("a");
+    a.href = postcard.spookardsUrl;
+    a.target = "_blank";
 
-    quotes.forEach((postcard: { spookardsUrl: string }) => {
-      const card = document.createElement("div");
-      card.className = "aspect-video w-52";
-      const a = document.createElement("a");
-      a.href = postcard.spookardsUrl;
-      a.target = "_blank";
+    const img = document.createElement("img");
+    img.src = postcard.spookardsUrl;
+    img.alt = "Postcard";
+    img.className =
+      "absolute w-full h-full object-cover transition hover:scale-105 hover:saturate-200";
 
-      const img = document.createElement("img");
-      img.src = postcard.spookardsUrl;
-      img.alt = "Postcard";
-
-      a.appendChild(img);
-      card.appendChild(a);
-      latestsCards.appendChild(card);
-    });
+    a.appendChild(img);
+    card.appendChild(a);
+    latestsCards.appendChild(card);
   };
+
+  // Check if a postcard URL is already in the DOM
+  const isPostcardInDom = (url: string) => {
+    const existingImages = latestsCards.querySelectorAll("img");
+    return Array.from(existingImages).some((img) => img.src === url);
+  };
+
+  // Initialize latest spookards on first load
+  if (quotes.length > 0) {
+    quotes.forEach((postcard: any) => {
+      addSpookardToDOM(postcard);
+    });
+  } else {
+    latestsCards.innerHTML = `<p class="text-center font-mona text-xl text-red-500">No hay postcards para mostrar</p>`;
+  }
 
   downloadBtn.addEventListener("click", () => {
     const a = document.createElement("a");
