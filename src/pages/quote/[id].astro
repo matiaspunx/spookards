@@ -58,8 +58,10 @@ const id = params.id;
         }}
       >
         <button
-          class="inline-flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 font-mona text-2xl text-white transition hover:rotate-1 hover:scale-110 hover:bg-red-700"
-          >Subir imagen <IconUpload /></button
+          class="group inline-flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 font-mona text-2xl text-white transition hover:rotate-1 hover:scale-110 hover:bg-red-700"
+          >Subir imagen <IconUpload
+            class="group-hover:animate-bounce"
+          /></button
         >
       </CldUploadWidget>
 
