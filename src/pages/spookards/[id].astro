@@ -99,11 +99,12 @@ import { CldImage } from "astro-cloudinary";
 
   let postcardUrl = "";
 
-  console.log(quoteJson);
+  //console.log(quoteJson);
 
   function createPostcard() {
     const url = getCldOgImageUrl({
       src: quoteJson.publicId,
+      crop: { type: "auto", gravity: "face", source: true },
       replaceBackground: `a terrifying halloween background from the horror movie ${quoteJson.movie_en}`,
       replace: {
         to: `transform into a character or monster or creature from the movie ${quoteJson.movie_en}`,
@@ -219,6 +220,7 @@ import { CldImage } from "astro-cloudinary";
 
   const urlOriginal = getCldOgImageUrl({
     src: quoteJson.publicId,
+    crop: { type: "auto", gravity: "face", source: true },
   });
 
   photoOriginal.src = urlOriginal;

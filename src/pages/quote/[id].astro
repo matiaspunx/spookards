@@ -125,6 +125,10 @@ const id = params.id;
   const showPhoto = (publicId: string) => {
     const url = getCldImageUrl({
       src: publicId,
+      crop: { type: "auto", gravity: "face", source: true },
+      width: 1280,
+      height: 720,
+      aspectRatio: "16:9",
     });
 
     photo.src = url;
