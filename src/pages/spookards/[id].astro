@@ -10,9 +10,9 @@ import { CldImage } from "astro-cloudinary";
     <div id="photo-container" class="mt-8 place-content-center">
       <div
         id="loading"
-        class="relative flex h-full min-h-[172px] w-full items-center justify-center rounded-lg shadow-lg transition md:min-h-[453px]"
+        class="relative flex h-full min-h-[171px] w-full items-center justify-center rounded-lg shadow-lg transition md:min-h-[453px]"
       >
-        <div class="absolute z-0 rounded-lg bg-black">
+        <div class="absolute inset-0 z-0 h-full w-full rounded-lg bg-black">
           <CldImage
             id="photo-original-big"
             src=""
@@ -37,7 +37,7 @@ import { CldImage } from "astro-cloudinary";
 
     <div class="mt-8 flex items-center justify-center gap-x-4 text-center">
       <h4 class="font-marker2 text-xl text-red-800 shadow-lg">Foto original</h4>
-      <div class="aspect-video w-52">
+      <div class="aspect-video w-36 md:w-52">
         <CldImage
           id="photo-original"
           src=""
