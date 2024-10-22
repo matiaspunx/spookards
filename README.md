@@ -23,3 +23,10 @@ The project is built with Astro and JavaScript, incorporating several advanced d
 ### Impact:
 
 Spookards offers a unique and creative way to celebrate Halloween by leveraging artificial intelligence to deliver personalized and exciting content. It's perfect for those looking to add a spooky and fun twist to their social media interactions.
+
+## TODO
+
+- Add a button to share in social media
+- Login with Supabase to save postcards to a database
+- Add a button to regenerate postcard
+- Add a button to delete postcard

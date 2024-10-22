@@ -1,4 +1,5 @@
 ---
+import IconDownload from "@/components/icons/iconDownload.astro";
 import IconShare from "@/components/icons/iconShare.astro";
 import Layout from "@/layouts/Layout.astro";
 import { CldImage } from "astro-cloudinary";
@@ -35,7 +36,7 @@ import { CldImage } from "astro-cloudinary";
     </div>
 
     <div class="mt-8 flex items-center justify-center gap-x-4 text-center">
-      <h4 class="font-marker2 text-xl text-red-800">Foto original</h4>
+      <h4 class="font-marker2 text-xl text-red-800 shadow-lg">Foto original</h4>
       <div class="aspect-video w-52">
         <CldImage
           id="photo-original"
@@ -56,7 +57,7 @@ import { CldImage } from "astro-cloudinary";
         <button
           id="download-btn"
           class="flex items-center gap-x-2 rounded-lg bg-red-500 px-3 py-2 text-white transition hover:scale-110 hover:bg-red-700"
-          >Descargar postcard <IconShare /></button
+          >Descargar postcard <IconDownload /></button
         >
       </div>
     </div>
@@ -105,7 +106,7 @@ import { CldImage } from "astro-cloudinary";
       src: quoteJson.publicId,
       replaceBackground: `a terrifying halloween background from the horror movie ${quoteJson.movie_en}`,
       replace: {
-        to: `transform into a monster or creature from the movie ${quoteJson.movie_en}`,
+        to: `transform into a character or monster or creature from the movie ${quoteJson.movie_en}`,
         from: "people",
         preserveGeometry: true,
       },
@@ -173,7 +174,7 @@ import { CldImage } from "astro-cloudinary";
             fontFamily: "Lato",
             fontSize: 23,
             fontWeight: "normal",
-            text: "created with @spookards",
+            text: "creado con @spookards",
             letterSpacing: 0,
           },
           effects: [
@@ -207,7 +208,6 @@ import { CldImage } from "astro-cloudinary";
 
       quoteJson.spookardsUrl = url;
 
-      // Add the newly created spookard only if it's not already in the DOM
       if (!isPostcardInDom(quoteJson.spookardsUrl)) {
         if (quoteJson.spookardsUrl !== "undefined" || !quoteJson.spookardsUrl) {
           addSpookardToDOM(quoteJson);
@@ -263,13 +263,6 @@ import { CldImage } from "astro-cloudinary";
   const isPostcardInDom = (url: string) => {
     const existingImages = latestsCards.querySelectorAll("img");
     return Array.from(existingImages).some((img) => img.src === url);
-  };
-
-  const isPostcardLinkInDom = (url: string) => {
-    const existingA = latestsCards.querySelectorAll("a");
-    return Array.from(existingA).some(
-      (a) => a.href === url || a.href !== "undefined"
-    );
   };
 
   // Initialize latest spookards on first load
