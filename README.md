@@ -2,13 +2,13 @@
 
 ## description
 
-Spookards is a web application that generates postcards with scary quotes from your favorite movies. It uses the [Cloudinary](https://cloudinary.com/) service to store and serve the images, use Google Gemini IA to generate quotes, and Supabase to save the quotes.
+Spookards is a web application that generates postcards with scary quotes from your favorite movies. It uses the [Cloudinary](https://cloudinary.com/) service to store, transform and serve the images, use Google Gemini IA to generate quotes, and Supabase to save the quotes.
 
 ## Features
 
 - Generate quotes from your favorite movies
 - Upload your own images for the postcards
-- Generate postcards with quotes from your favorite movies
+- Generate postcards transforming you into a character, monster or creature from the movie
 
 ## About the project
 
