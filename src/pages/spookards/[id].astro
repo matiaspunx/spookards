@@ -90,7 +90,9 @@ import { CldImage } from "astro-cloudinary";
   const photoOriginalBig = document.querySelector(
     "#photo-original-big"
   ) as HTMLImageElement;
-  const downloadBtn = document.getElementById("download-btn") as HTMLElement;
+  const downloadBtn = document.getElementById(
+    "download-btn"
+  ) as HTMLButtonElement;
   const latestsCards = document.getElementById("latests-cards") as HTMLElement;
 
   // Get the array of quotes from local storage
@@ -101,7 +103,8 @@ import { CldImage } from "astro-cloudinary";
 
   let postcardUrl = "";
 
-  //console.log(quoteJson);
+  //disable downloadBtn until the image is ready
+  downloadBtn.disabled = true;
 
   function createPostcard() {
     const url = getCldOgImageUrl({
@@ -135,7 +138,7 @@ import { CldImage } from "astro-cloudinary";
           text: {
             color: "white",
             fontFamily: "Merriweather",
-            fontSize: 50,
+            fontSize: 44,
             fontWeight: "bold",
             lineSpacing: 10,
             text: quoteJson.title,
@@ -216,6 +219,7 @@ import { CldImage } from "astro-cloudinary";
       photo.style.opacity = "1";
       photoOriginalBig.style.opacity = "0";
       postcardUrl = url;
+      downloadBtn.disabled = false;
 
       quoteJson.spookardsUrl = url;
 

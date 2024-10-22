@@ -1,0 +1,31 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { CldImage } from "astro-cloudinary";
+import { getCollection } from "astro:content";
+const images = await getCollection("images");
+console.log(images);
+---
+
+<Layout title="Spookards">
+  <main>
+    <div class="rounded-lg border border-red-600 bg-red-600/40 p-6 text-center">
+      <h2 class="text-balance font-mona text-xl text-red-300">
+        Últimos spookards generados
+      </h2>
+      <ul class="grid grid-cols-2 gap-4 md:grid-cols-3">
+        {
+          /* images.map(({ data }) => (
+            <li>
+              <CldImage
+                id="photo-image"
+                src={data.public_id}
+                alt=""
+                class={`flex h-full w-full rounded-lg shadow-lg transition`}
+              />
+            </li>
+          )) */
+        }
+      </ul>
+    </div>
+  </main>
+</Layout>
