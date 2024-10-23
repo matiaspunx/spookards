@@ -236,9 +236,9 @@ import { CldImage } from "astro-cloudinary";
       });
 
       if (response.ok) {
-        console.log("Imagen guardada en la base de datos", response);
+        console.log("Imagen guardada");
       } else {
-        console.log("Error al guardar la imagen en la base de datos", response);
+        console.log("Error al guardar la imagen");
       }
 
       if (!isPostcardInDom(quoteJson.spookardsUrl)) {
