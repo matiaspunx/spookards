@@ -12,7 +12,11 @@ export const getMovies = async () => {
 };
 
 export const getQuotes = async () => {
-  const { data, error } = await supabase.from("spookards").select();
+  const { data, error } = await supabase
+    .from("spookards")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(20);
   if (error) {
     console.log("Error retrieving quotes from Supabase:", error);
     return [];

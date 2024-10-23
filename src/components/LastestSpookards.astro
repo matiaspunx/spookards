@@ -3,27 +3,26 @@ import { getQuotes } from "@/lib/sbfunctions";
 import { type QuoteData } from "@/types/Types";
 
 const spookards: QuoteData[] = await getQuotes();
-console.log(spookards);
+//console.log(spookards);
 ---
 
 <section aria-label="ultimas spookards" class="space-y-8">
   <h2 class="text-balance text-center font-marker2 text-xl text-red-300">
-    Últimas spookards
+    Últimas spookards creadas por la comunidad
   </h2>
   <ul class="grid grid-cols-2 gap-4 md:grid-cols-3">
     {
       spookards.map((spookard: QuoteData) => (
         <li>
           <a
-            href={spookard.spookardsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group relative inline-block aspect-video h-full w-full px-1 font-mona text-white"
+            href="#"
+            data-src={spookard.spookardsUrl}
+            class="openBtn group relative inline-block aspect-video h-full w-full px-1 font-mona text-white"
           >
             <img
               src={spookard.spookardsUrl}
               alt="Postcard"
-              class="absolute h-full w-full rounded-lg object-cover transition hover:scale-105 hover:saturate-200"
+              class="absolute h-full w-full rounded-lg object-cover grayscale transition hover:scale-105 hover:grayscale-0"
             />
           </a>
         </li>
@@ -31,3 +30,68 @@ console.log(spookards);
     }
   </ul>
 </section>
+<dialog id="modal">
+  <button
+    id="close-btn"
+    class="absolute right-4 top-4 rounded-lg bg-red-500 px-3 py-2 text-white"
+    >x</button
+  >
+  <img id="modal-img" src="" alt="" />
+</dialog>
+<style>
+  dialog {
+    top: 50%;
+    transform: translateY(-60%);
+    max-width: 90vw;
+    opacity: 0;
+    transition:
+      opacity 0s ease,
+      display 0s ease allow-discrete;
+    &[open] {
+      opacity: 1;
+      transition: opacity 0.3s ease-in-out;
+      @starting-style {
+        top: 50%;
+        transform: translateY(-60%);
+        opacity: 0;
+      }
+    }
+  }
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+</style>
+<script>
+  const modal = document.getElementById("modal") as HTMLDialogElement;
+  const closeBtn = document.getElementById("close-btn") as HTMLButtonElement;
+  const openBtn = document.querySelectorAll(
+    ".openBtn"
+  ) as NodeListOf<HTMLElement>;
+  const img = document.getElementById("modal-img") as HTMLImageElement;
+
+  openBtn.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const src = btn.dataset.src ?? "";
+      img.src = src;
+      modal.showModal();
+    });
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      modal.close();
+    }
+  });
+
+  modal.addEventListener("click", (e) => {
+    // Check if the click was on the dialog, not inside its content
+    if (e.target === modal) {
+      modal.close();
+    }
+  });
+</script>
