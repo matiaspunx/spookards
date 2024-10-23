@@ -1,0 +1,33 @@
+---
+import { getQuotes } from "@/lib/sbfunctions";
+import { type QuoteData } from "@/types/Types";
+
+const spookards: QuoteData[] = await getQuotes();
+console.log(spookards);
+---
+
+<section aria-label="ultimas spookards" class="space-y-8">
+  <h2 class="text-balance text-center font-marker2 text-xl text-red-300">
+    Últimas spookards
+  </h2>
+  <ul class="grid grid-cols-2 gap-4 md:grid-cols-3">
+    {
+      spookards.map((spookard: QuoteData) => (
+        <li>
+          <a
+            href={spookard.spookardsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative inline-block aspect-video h-full w-full px-1 font-mona text-white"
+          >
+            <img
+              src={spookard.spookardsUrl}
+              alt="Postcard"
+              class="absolute h-full w-full rounded-lg object-cover transition hover:scale-105 hover:saturate-200"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

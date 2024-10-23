@@ -1,9 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { type Movie } from "@/types/Types";
 
 export const getMovies = async () => {
   const { data, error } = await supabase.rpc("get_random_movies", {
-    num_limit: 5,
+    num_limit: 6,
   });
   if (error) {
     console.log("Error retrieving movies from Supabase:", error);
@@ -12,12 +11,11 @@ export const getMovies = async () => {
   return data;
 };
 
-export const saveMovies = async (movies: Movie[]) => {
-  console.log(movies);
-  const { data, error } = await supabase.from("movies").insert(movies);
+export const getQuotes = async () => {
+  const { data, error } = await supabase.from("spookards").select();
   if (error) {
-    console.log("Error saving movies to Supabase:", error);
-    return;
+    console.log("Error retrieving quotes from Supabase:", error);
+    return [];
   }
-  console.log("Movies saved to Supabase:", data);
+  return data;
 };

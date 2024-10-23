@@ -18,7 +18,7 @@ export const POST: APIRoute = async ({ request }) => {
   text = text.replace(/```json/g, "");
   text = text.replace(/```/g, "");
   text = text.replace(/\n/g, "");
-  //console.log(text); // debug si la respuesta de la api es mala o mal formateada
+
   return new Response(text, {
     headers: {
       "Content-Type": "text/plain",

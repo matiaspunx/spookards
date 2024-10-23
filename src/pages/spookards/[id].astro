@@ -1,7 +1,6 @@
 ---
 import IconBack from "@/components/icons/iconBack.astro";
 import IconDownload from "@/components/icons/iconDownload.astro";
-import IconShare from "@/components/icons/iconShare.astro";
 import Layout from "@/layouts/Layout.astro";
 import { CldImage } from "astro-cloudinary";
 ---
@@ -220,14 +219,27 @@ import { CldImage } from "astro-cloudinary";
       return error;
     };
 
-    photo.onload = () => {
+    photo.onload = async () => {
       loading.style.display = "none";
       photo.style.opacity = "1";
       photoOriginalBig.style.opacity = "0";
       postcardUrl = url;
       downloadBtn.disabled = false;
 
+      quoteJson.public_id = quoteJson.publicId;
       quoteJson.spookardsUrl = url;
+
+      //saveQuote(quoteJson);
+      const response = await fetch("/api/postcard", {
+        method: "POST",
+        body: JSON.stringify(quoteJson),
+      });
+
+      if (response.ok) {
+        console.log("Imagen guardada en la base de datos", response);
+      } else {
+        console.log("Error al guardar la imagen en la base de datos", response);
+      }
 
       if (!isPostcardInDom(quoteJson.spookardsUrl)) {
         if (quoteJson.spookardsUrl !== "undefined" || !quoteJson.spookardsUrl) {
